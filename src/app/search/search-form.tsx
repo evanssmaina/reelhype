@@ -19,19 +19,16 @@ export default function SearchForm({ initialQuery }: SearchFormProps) {
 
   const handleSearch = (value: string) => {
     setSearchQuery(value);
+    const params = new URLSearchParams();
     if (value) {
-      router.push(`/search?q=${encodeURIComponent(value)}&page=1`);
-    } else {
-      router.push('/search');
+      params.set('q', value);
+      params.set('page', '1');
     }
+    router.push(`/search?${params.toString()}`);
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col items-center gap-4"
-    >
+    <div className="flex flex-col items-center gap-4">
       <h1 className="text-center text-4xl font-bold">Search</h1>
       <div className="w-full max-w-xl">
         <Input
@@ -46,6 +43,6 @@ export default function SearchForm({ initialQuery }: SearchFormProps) {
           }}
         />
       </div>
-    </motion.div>
+    </div>
   );
 }

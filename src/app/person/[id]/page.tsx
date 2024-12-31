@@ -8,9 +8,7 @@ import PersonCredits from './person-credits';
 import PersonDetails from './person-details';
 
 interface PageProps {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }
 
 async function fetchPersonData(id: string) {
@@ -24,7 +22,8 @@ async function fetchPersonData(id: string) {
 }
 
 export default async function PersonPage({ params }: PageProps) {
-  const { details, credits, images } = await fetchPersonData(params.id);
+  const resolvedParams = await params;
+  const { details, credits, images } = await fetchPersonData(resolvedParams.id);
   const backdropPath =
     credits.cast?.[0]?.backdrop_path || credits.crew?.[0]?.backdrop_path;
 
