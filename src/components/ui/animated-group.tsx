@@ -1,7 +1,9 @@
 'use client';
-import { Component, ReactNode } from 'react';
-import { motion, Variants } from 'motion/react';
+
+import { Component, JSX, ReactNode } from 'react';
 import React from 'react';
+
+import { Variants, motion } from 'motion/react';
 
 type PresetType =
   | 'fade'
@@ -144,7 +146,7 @@ function AnimatedGroup({
   variants,
   preset,
   as = 'div',
-  asChild = "div"
+  asChild = 'div',
 }: AnimatedGroupProps) {
   const selectedVariants = preset
     ? presetVariants[preset]
@@ -152,16 +154,14 @@ function AnimatedGroup({
   const containerVariants = variants?.container || selectedVariants.container;
   const itemVariants = variants?.item || selectedVariants.item;
 
-  const MotionComponent = motion.create(
-      as as keyof JSX.IntrinsicElements
-  );
+  const MotionComponent = motion.create(as as keyof JSX.IntrinsicElements);
 
   const MotionChild = motion.create(asChild as keyof JSX.IntrinsicElements);
 
   return (
     <MotionComponent
-      initial='hidden'
-      animate='visible'
+      initial="hidden"
+      animate="visible"
       variants={containerVariants}
       className={className}
     >
