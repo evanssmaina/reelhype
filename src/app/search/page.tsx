@@ -4,15 +4,16 @@ import SearchForm from './search-form';
 import SearchResults from './search-results';
 
 interface SearchPageProps {
-  searchParams: {
+  searchParams: Promise<{
     q?: string;
     page?: string;
-  };
+  }>;
 }
 
-export default function SearchPage({ searchParams }: SearchPageProps) {
-  const query = searchParams.q || '';
-  const page = Number(searchParams.page) || 1;
+export default async function SearchPage({ searchParams }: SearchPageProps) {
+  const resolvedParams = await searchParams;
+  const query = resolvedParams.q || '';
+  const page = Number(resolvedParams.page) || 1;
 
   return (
     <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-8 px-4 py-8">
