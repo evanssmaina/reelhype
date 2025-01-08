@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Input } from '@nextui-org/react';
-import { motion } from 'framer-motion';
 
 import { SearchIcon } from '@/components/ui/search';
 

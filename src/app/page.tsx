@@ -44,13 +44,11 @@ function ContentSkeleton() {
 }
 
 async function HeroSectionData() {
-  unstable_noStore();
   const trendingAll = await fetchTMDBData('/trending/all/day?language=en-US');
   return <HeroSectionWrapper trendingData={trendingAll.results} />;
 }
 
 async function TrendingMovies() {
-  unstable_noStore();
   const data = await fetchTMDBData('/trending/movie/day?language=en-US');
   const movies = data.results as Movies[];
   return <MovieList movies={movies} />;

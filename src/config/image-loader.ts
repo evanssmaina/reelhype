@@ -6,13 +6,11 @@ interface CloudinaryImageLoader {
   quality?: number | undefined;
 }
 
-const cloudianryName = 'drshb6sh5';
-
-export default function cloudinaryLoader({
+export default function cloudflareLoader({
   src,
   width,
   quality,
 }: CloudinaryImageLoader) {
-  const params = ['f_auto', 'c_limit', `w_${width}`, `q_${quality || 'auto'}`];
-  return `https://res.cloudinary.com/${cloudianryName}/image/fetch/${params.join(',')}/${src}`;
+  const params = [`width=${width}`, `quality=${quality || 75}`, 'format=auto'];
+  return `https://mpesaflow.com/cdn-cgi/image/${params.join(',')}/${src}`;
 }

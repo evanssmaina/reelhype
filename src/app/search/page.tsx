@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 
 import SearchForm from './search-form';
 import SearchResults from './search-results';
+import SearchResultsWrapper from './search-results-wrapper';
 
 interface SearchPageProps {
   searchParams: Promise<{
@@ -33,7 +34,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             </div>
           }
         >
-          <SearchResults query={query} page={page} />
+          <SearchResultsWrapper query={query} page={page} />
         </Suspense>
       )}
     </main>

@@ -10,6 +10,7 @@ import type {
 
 import CastSection from '@/components/media/cast-section';
 import MediaDetails from '@/components/media/media-details';
+import SimilarMedia from '@/components/media/similar-media';
 import VideoSection from '@/components/media/video-section';
 import ImageComponent from '@/components/shared/image';
 
@@ -63,6 +64,22 @@ function CastSectionSkeleton() {
   );
 }
 
+function SimilarMediaSkeleton() {
+  return (
+    <div className="space-y-4">
+      <div className="h-8 w-48 animate-pulse rounded-lg bg-muted" />
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        {[...Array(6)].map((_, i) => (
+          <div key={i} className="space-y-2">
+            <div className="aspect-[2/3] animate-pulse rounded-lg bg-muted" />
+            <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 interface PageProps {
   params: Promise<{ media_type: string; id: string }>;
 }
@@ -108,12 +125,13 @@ function MediaContentSkeleton() {
 }
 
 async function MovieContent({ id }: { id: string }) {
-  const [details, videos, credits] = await Promise.all([
+  const [details, videos, credits, similar] = await Promise.all([
     fetchTMDBData(`/movie/${id}?language=en-US`) as Promise<MovieDetails>,
     fetchTMDBData(
       `/movie/${id}/videos?language=en-US`
     ) as Promise<VideoDetails>,
     fetchTMDBData(`/movie/${id}/credits?language=en-US`),
+    fetchTMDBData(`/movie/${id}/similar?language=en-US`),
   ]);
 
   return (
@@ -121,16 +139,18 @@ async function MovieContent({ id }: { id: string }) {
       details={details}
       videos={videos}
       credits={credits}
+      similar={similar.results}
       type="movie"
     />
   );
 }
 
 async function TVContent({ id }: { id: string }) {
-  const [details, videos, credits] = await Promise.all([
+  const [details, videos, credits, similar] = await Promise.all([
     fetchTMDBData(`/tv/${id}?language=en-US`) as Promise<TVShowDetails>,
     fetchTMDBData(`/tv/${id}/videos?language=en-US`) as Promise<VideoDetails>,
     fetchTMDBData(`/tv/${id}/credits?language=en-US`),
+    fetchTMDBData(`/tv/${id}/similar?language=en-US`),
   ]);
 
   return (
@@ -138,6 +158,7 @@ async function TVContent({ id }: { id: string }) {
       details={details}
       videos={videos}
       credits={credits}
+      similar={similar.results}
       type="tv"
     />
   );
@@ -147,11 +168,13 @@ function MediaContent({
   details,
   videos,
   credits,
+  similar,
   type,
 }: {
   details: MovieDetails | TVShowDetails;
   videos: VideoDetails;
   credits: any;
+  similar: any[];
   type: 'movie' | 'tv';
 }) {
   const backdropPath = `https://image.tmdb.org/t/p/original${details.backdrop_path}`;
@@ -176,7 +199,7 @@ function MediaContent({
         {/* Main Content */}
         <div className="flex flex-col gap-4">
           <Suspense fallback={<VideoSectionSkeleton />}>
-            <VideoSection videos={videos} />
+            <VideoSection videos={videos} type={type} details={details} />
           </Suspense>
           <Suspense fallback={<MediaDetailsSkeleton />}>
             <MediaDetails details={details} type={type} />
@@ -186,6 +209,11 @@ function MediaContent({
         {/* Cast Section */}
         <Suspense fallback={<CastSectionSkeleton />}>
           <CastSection cast={credits.cast} crew={credits.crew} />
+        </Suspense>
+
+        {/* Similar Media Section */}
+        <Suspense fallback={<SimilarMediaSkeleton />}>
+          <SimilarMedia similar={similar} type={type} />
         </Suspense>
       </div>
     </>

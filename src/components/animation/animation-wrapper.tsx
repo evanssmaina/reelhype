@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
+import { usePathname } from 'next/navigation';
+
 import FirstAnimation from './first-animation';
 
 export default function AnimationWrapper({

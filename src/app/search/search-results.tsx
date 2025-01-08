@@ -1,4 +1,8 @@
-import { Suspense } from 'react';
+'use client';
+
+import { use } from 'react';
+
+import { useRouter } from 'next/navigation';
 
 import { Card, CardBody, Pagination } from '@nextui-org/react';
 
@@ -6,24 +10,11 @@ import ImageComponent from '@/components/shared/image';
 import LinkComponent from '@/components/shared/link';
 import { AnimatedGroup } from '@/components/ui/animated-group';
 
-import { fetchTMDBData } from '@/lib/tmdb';
-
 interface SearchResultsProps {
+  data: Promise<any>;
   query: string;
   page: number;
 }
-
-async function fetchSearchResults(query: string, page: number) {
-  if (!query) return null;
-
-  const data = await fetchTMDBData(
-    `/search/multi?include_adult=false&language=en-US&page=${page}&query=${encodeURIComponent(
-      query
-    )}`
-  );
-  return data;
-}
-
 function getMediaImage(result: any) {
   if (!result.poster_path && !result.profile_path && !result.backdrop_path) {
     return null;
@@ -44,11 +35,18 @@ function getMediaLink(result: any) {
   return `/watch/${result.media_type}/${result.id}`;
 }
 
-export default async function SearchResults({
+function getMediaType(result: any) {
+  if (!result.media_type) return 'Unknown';
+  return result.media_type.charAt(0).toUpperCase() + result.media_type.slice(1);
+}
+
+export default function SearchResults({
+  data,
   query,
   page,
 }: SearchResultsProps) {
-  const results = await fetchSearchResults(query, page);
+  const results = use(data);
+  const router = useRouter();
 
   if (!results || results.results.length === 0) {
     return (
@@ -64,10 +62,11 @@ export default async function SearchResults({
         preset="slide"
         className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
       >
-        {results.results.map((result: any) => {
-          const image = getMediaImage(result);
+        {results?.results.map((result: any) => {
           const title = getMediaTitle(result);
+          const image = getMediaImage(result);
           const link = getMediaLink(result);
+          const mediaType = getMediaType(result);
 
           return (
             <LinkComponent key={result.id} href={link}>
@@ -92,10 +91,7 @@ export default async function SearchResults({
                     <h3 className="line-clamp-1 text-lg font-semibold">
                       {title}
                     </h3>
-                    <p className="text-sm text-foreground/60">
-                      {result.media_type.charAt(0).toUpperCase() +
-                        result.media_type.slice(1)}
-                    </p>
+                    <p className="text-sm text-foreground/60">{mediaType}</p>
                   </div>
                 </CardBody>
               </Card>
@@ -110,6 +106,9 @@ export default async function SearchResults({
           page={page}
           variant="light"
           showControls
+          onChange={(page) => {
+            router.push(`/search?q=${query}&page=${page}`);
+          }}
           classNames={{
             wrapper: 'gap-2',
             item: 'w-8 h-8',

@@ -1,6 +1,6 @@
-'use client';
-
 import { Suspense } from 'react';
+
+import { fetchTMDBData } from '@/lib/tmdb';
 
 import SearchResults from './search-results';
 
@@ -9,10 +9,23 @@ interface SearchResultsWrapperProps {
   page: number;
 }
 
+async function fetchSearchResults(query: string, page: number) {
+  if (!query) return null;
+
+  const data = await fetchTMDBData(
+    `/search/multi?include_adult=false&language=en-US&page=${page}&query=${encodeURIComponent(
+      query
+    )}`
+  );
+  return data;
+}
+
 export default function SearchResultsWrapper({
   query,
   page,
 }: SearchResultsWrapperProps) {
+  const data = fetchSearchResults(query, page);
+
   return (
     <Suspense
       fallback={
@@ -26,7 +39,7 @@ export default function SearchResultsWrapper({
         </div>
       }
     >
-      <SearchResults query={query} page={page} />
+      <SearchResults data={data} query={query} page={page} />
     </Suspense>
   );
 }
