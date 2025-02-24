@@ -1,37 +1,125 @@
 interface Movies {
-  adult: boolean;
-  backdrop_path: string;
-  id: number;
-  title: string;
-  original_language: string;
-  original_title: string;
-  overview: string;
-  poster_path: string;
-  media_type: string;
-  genre_ids: number[];
-  popularity: number;
-  release_date: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
+  page: number;
+  results: [
+    {
+      adult: boolean;
+      backdrop_path: string | null;
+      id: number;
+      title: string;
+      original_language: string;
+      original_title: string;
+      overview: string;
+      poster_path: string | null;
+      media_type: 'movie';
+      genre_ids: number[];
+      popularity: number;
+      release_date: string;
+      video: boolean;
+      vote_average: number;
+      vote_count: number;
+    },
+  ];
+  total_pages: number;
+  total_results: number;
 }
 
 interface TVShows {
-  adult: boolean;
-  backdrop_path: string;
-  id: number;
-  name: string;
-  original_language: string;
-  original_name: string;
-  overview: string;
-  poster_path: string;
-  media_type: string;
-  genre_ids: number[];
-  popularity: number;
-  first_air_date: string;
-  vote_average: number;
-  vote_count: number;
-  origin_country: string[];
+  page: number;
+  results: [
+    {
+      adult: boolean;
+      backdrop_path: string | null;
+      id: number;
+      name: string;
+      original_language: string;
+      original_name: string;
+      overview: string;
+      poster_path: string | null;
+      media_type: 'tv';
+      genre_ids: number[];
+      popularity: number;
+      first_air_date: string;
+      vote_average: number;
+      vote_count: number;
+      origin_country: string[];
+    },
+  ];
+  total_pages: number;
+  total_results: number;
+}
+
+interface TrendingAll {
+  page: number;
+  results: [
+    {
+      adult: boolean;
+      backdrop_path: string | null;
+      id: number;
+      title?: string;
+      name?: string;
+      original_language: string;
+      original_title?: string;
+      original_name?: string;
+      overview: string;
+      poster_path: string | null;
+      media_type: 'movie' | 'tv';
+      genre_ids: number[];
+      popularity: number;
+      release_date?: string;
+      first_air_date?: string;
+      video?: boolean;
+      vote_average: number;
+      vote_count: number;
+      origin_country?: string[];
+    },
+  ];
+}
+
+interface SearchResults {
+  page: number;
+  results: {
+    id: number;
+    media_type: 'movie' | 'tv' | 'person';
+    adult?: boolean;
+    original_language?: string;
+    overview?: string;
+    popularity?: number;
+
+    // Movie & TV Show specific fields
+    title?: string;
+    name?: string;
+    original_title?: string;
+    original_name?: string;
+    backdrop_path?: string | null;
+    poster_path?: string | null;
+    genre_ids?: number[];
+    release_date?: string;
+    first_air_date?: string;
+    video?: boolean;
+    vote_average?: number;
+    vote_count?: number;
+    origin_country?: string[];
+
+    // Person specific fields
+    profile_path?: string | null;
+    known_for?: {
+      id: number;
+      media_type: 'movie' | 'tv';
+      title?: string;
+      name?: string;
+      original_title?: string;
+      original_name?: string;
+      backdrop_path?: string | null;
+      poster_path?: string | null;
+      genre_ids?: number[];
+      release_date?: string;
+      first_air_date?: string;
+      vote_average?: number;
+      vote_count?: number;
+    }[];
+  }[];
+  total_pages: number;
+  total_results: number;
 }
 
 interface MovieDetails {
@@ -176,4 +264,12 @@ interface VideoDetails {
   }[];
 }
 
-export type { Movies, TVShows, MovieDetails, TVShowDetails, VideoDetails };
+export type {
+  Movies,
+  TVShows,
+  MovieDetails,
+  TVShowDetails,
+  VideoDetails,
+  TrendingAll,
+  SearchResults,
+};

@@ -13,7 +13,11 @@ import {
   CarouselNavigation,
 } from '@/components/ui/carousel';
 
-export default function TVList({ tvShows }: { tvShows: TVShows[] }) {
+type TvShowsListpProps = {
+  tvShows: TVShows['results'][number][];
+};
+
+export default function TVList({ tvShows }: TvShowsListpProps) {
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
   return (
@@ -34,7 +38,7 @@ export default function TVList({ tvShows }: { tvShows: TVShows[] }) {
                 <motion.div transition={{ duration: 0.2 }}>
                   <LinkComponent href={`/watch/tv/${tvShow.id}`}>
                     <ImageComponent
-                      src={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
+                      src={tvShow.poster_path ?? ''}
                       alt={tvShow.name}
                       width={200}
                       height={300}

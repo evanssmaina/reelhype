@@ -12,5 +12,5 @@ export default function cloudflareLoader({
   quality,
 }: CloudinaryImageLoader) {
   const params = [`width=${width}`, `quality=${quality || 75}`, 'format=auto'];
-  return `https://mpesaflow.com/cdn-cgi/image/${params.join(',')}/${src}`;
+  return `https://res.cloudinary.com/drshb6sh5/image/fetch/${params.join(',')}/${src}`;
 }

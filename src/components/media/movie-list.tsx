@@ -13,7 +13,11 @@ import {
   CarouselNavigation,
 } from '@/components/ui/carousel';
 
-export default function MovieList({ movies }: { movies: Movies[] }) {
+type MovieListpProps = {
+  movies: Movies['results'][number][];
+};
+
+export default function MovieList({ movies }: MovieListpProps) {
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
   return (
@@ -34,7 +38,7 @@ export default function MovieList({ movies }: { movies: Movies[] }) {
                 <motion.div transition={{ duration: 0.2 }}>
                   <LinkComponent href={`/watch/movie/${movie.id}`}>
                     <ImageComponent
-                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                      src={movie.poster_path ?? ''}
                       alt={movie.title}
                       width={200}
                       height={300}

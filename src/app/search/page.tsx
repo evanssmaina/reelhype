@@ -1,8 +1,9 @@
 import { Suspense } from 'react';
 
+import { getSearchResults } from '@/server/tmdb';
+
 import SearchForm from './search-form';
 import SearchResults from './search-results';
-import SearchResultsWrapper from './search-results-wrapper';
 
 interface SearchPageProps {
   searchParams: Promise<{
@@ -38,5 +39,35 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         </Suspense>
       )}
     </main>
+  );
+}
+
+async function SearchResultsWrapper({
+  query,
+  page,
+}: {
+  query: string;
+  page: number;
+}) {
+  const { searchResults } = await getSearchResults({
+    page: page,
+    query: query,
+  });
+
+  return (
+    <Suspense
+      fallback={
+        <div className="grid animate-pulse grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {[...Array(8)].map((_, i) => (
+            <div
+              key={i}
+              className="aspect-[2/3] rounded-lg bg-gray-200 dark:bg-gray-800"
+            />
+          ))}
+        </div>
+      }
+    >
+      <SearchResults results={searchResults} query={query} page={page} />
+    </Suspense>
   );
 }

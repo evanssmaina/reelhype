@@ -9,6 +9,8 @@ import MobileNav from '@/components/layout/mobile-nav';
 import SideNav from '@/components/layout/side-nav';
 import TopMobileNav from '@/components/layout/top-mobile-nav';
 
+import { cn } from '@/lib/utils';
+
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
@@ -24,7 +26,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`min-h-screen antialiased ${inter.variable} ${urbanist.variable} font-sans`}
+        className={cn(
+          inter.variable,
+          urbanist.variable,
+          'min-h-screen antialiased'
+        )}
       >
         <NextUIProviderWrapper>
           <AnimationWrapper>

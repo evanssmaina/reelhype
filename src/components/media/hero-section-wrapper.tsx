@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from 'react';
 
+import { TrendingAll } from '@/types/tmdb-types';
+
 import { HeroSection } from './hero-section';
 
 interface HeroSectionWrapperProps {
-  trendingData: any[];
+  trendingData: TrendingAll['results'][number][];
 }
 
 export default function HeroSectionWrapper({

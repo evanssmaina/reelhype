@@ -1,7 +1,5 @@
 import { Suspense } from 'react';
 
-import Image from 'next/image';
-
 import type {
   MovieDetails,
   TVShowDetails,

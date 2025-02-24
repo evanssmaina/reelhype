@@ -1,9 +1,8 @@
 'use client';
 
-import { use } from 'react';
-
 import { useRouter } from 'next/navigation';
 
+import { SearchResults as SearchResultsTypes } from '@/types/tmdb-types';
 import { Card, CardBody, Pagination } from '@nextui-org/react';
 
 import ImageComponent from '@/components/shared/image';
@@ -11,41 +10,16 @@ import LinkComponent from '@/components/shared/link';
 import { AnimatedGroup } from '@/components/ui/animated-group';
 
 interface SearchResultsProps {
-  data: Promise<any>;
+  results: SearchResultsTypes;
   query: string;
   page: number;
 }
-function getMediaImage(result: any) {
-  if (!result.poster_path && !result.profile_path && !result.backdrop_path) {
-    return null;
-  }
-  return `https://image.tmdb.org/t/p/w500${
-    result.poster_path || result.profile_path || result.backdrop_path
-  }`;
-}
-
-function getMediaTitle(result: any) {
-  return result.title || result.name;
-}
-
-function getMediaLink(result: any) {
-  if (result.media_type === 'person') {
-    return `/person/${result.id}`;
-  }
-  return `/watch/${result.media_type}/${result.id}`;
-}
-
-function getMediaType(result: any) {
-  if (!result.media_type) return 'Unknown';
-  return result.media_type.charAt(0).toUpperCase() + result.media_type.slice(1);
-}
 
 export default function SearchResults({
-  data,
+  results,
   query,
   page,
 }: SearchResultsProps) {
-  const results = use(data);
   const router = useRouter();
 
   if (!results || results.results.length === 0) {
@@ -62,21 +36,19 @@ export default function SearchResults({
         preset="slide"
         className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
       >
-        {results?.results.map((result: any) => {
-          const title = getMediaTitle(result);
-          const image = getMediaImage(result);
-          const link = getMediaLink(result);
-          const mediaType = getMediaType(result);
-
+        {results?.results.map((result) => {
           return (
-            <LinkComponent key={result.id} href={link}>
+            <LinkComponent
+              key={result.id}
+              href={`/watch/${result.media_type}/${result.id}`}
+            >
               <Card className="group h-full overflow-hidden">
                 <CardBody className="p-0">
                   <div className="relative aspect-[2/3] w-full overflow-hidden">
-                    {image ? (
+                    {result.poster_path ? (
                       <ImageComponent
-                        src={image}
-                        alt={title}
+                        src={result.poster_path ?? ''}
+                        alt={result.title || result.name || ''}
                         width={500}
                         height={750}
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -89,9 +61,11 @@ export default function SearchResults({
                   </div>
                   <div className="p-4">
                     <h3 className="line-clamp-1 text-lg font-semibold">
-                      {title}
+                      {result.title || result.name || ''}
                     </h3>
-                    <p className="text-sm text-foreground/60">{mediaType}</p>
+                    <p className="text-sm text-foreground/60">
+                      {result.media_type}
+                    </p>
                   </div>
                 </CardBody>
               </Card>
