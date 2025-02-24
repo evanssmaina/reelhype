@@ -12,5 +12,5 @@ export default function cloudflareLoader({
   quality,
 }: CloudinaryImageLoader) {
   const params = ['f_auto', 'c_limit', `w_${width}`, `q_${quality || 'auto'}`];
-  return `https://res.cloudinary.com/drshb6sh5/image/fetch/${params.join(',')}${src}`;
+  return `https://res.cloudinary.com/drshb6sh5/image/fetch/${params.join(',')}/${src}`;
 }
