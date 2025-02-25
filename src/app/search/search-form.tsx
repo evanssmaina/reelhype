@@ -1,36 +1,19 @@
 'use client';
 
-import React from 'react';
-
-import { Input } from '@nextui-org/react';
-
-import { SearchIcon } from '@/components/ui/search';
-
 interface SearchFormProps {
-  initialQuery: string;
-  onSearch: (value: string) => void;
+  query: string;
+  onSearch: (query: string) => void;
 }
 
-export default function SearchForm({
-  initialQuery,
-  onSearch,
-}: SearchFormProps) {
+export default function SearchForm({ query, onSearch }: SearchFormProps) {
   return (
-    <div className="flex flex-col items-center gap-4">
-      <h1 className="text-center text-4xl font-bold">Search</h1>
-      <div className="w-full max-w-xl">
-        <Input
-          value={initialQuery}
-          onValueChange={onSearch}
-          placeholder="Search for movies, TV shows, people..."
-          startContent={<SearchIcon />}
-          size="lg"
-          classNames={{
-            input: 'text-lg',
-            inputWrapper: 'h-12',
-          }}
-        />
-      </div>
+    <div className="w-full">
+      <input
+        value={query}
+        onChange={({ target }) => onSearch(target.value)}
+        placeholder="Search for movies, TV shows, people..."
+        className="h-[60px] w-full rounded-2xl border border-gray-600 px-4 transition-all duration-300 focus:border-primary"
+      />
     </div>
   );
 }

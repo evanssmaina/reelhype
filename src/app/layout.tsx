@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
-  title: 'REELHYPE',
+  title: 'Reelhype',
   description: 'Your ultimate movie and TV show companion',
 };
 

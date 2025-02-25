@@ -39,7 +39,7 @@ export function HeroSection({
           className="h-[60vh] object-cover brightness-75 lg:h-[90vh]"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent backdrop-blur-sm" />
       </div>
       <motion.div
         initial={{ y: 20, opacity: 0 }}

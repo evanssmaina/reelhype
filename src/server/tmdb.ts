@@ -70,8 +70,9 @@ async function getSearchResults({
   include_adult?: boolean;
   language?: string;
 }) {
+  const pageString = page ? `&page=${page}` : '';
   const data: SearchResults = await fetchTMDBData(
-    `/search/multi?include_adult=${include_adult}&language=${language}&page=${page}&query=${encodeURIComponent(
+    `/search/multi?include_adult=${include_adult}&language=${language}${pageString}&query=${encodeURIComponent(
       query
     )}`
   );
@@ -95,6 +96,8 @@ async function getSearchResults({
     total_results: data.total_results,
     results,
   };
+
+  console.log(searchResults);
 
   return { searchResults };
 }

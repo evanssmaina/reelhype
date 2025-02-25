@@ -26,7 +26,7 @@ export default function SideNav() {
         <LinkComponent href="/">
           <div
             className={cn(
-              'my-4 flex h-[48px] w-[60px] items-center justify-center rounded-lg p-2 transition-colors hover:bg-accent',
+              'my-4 flex h-[48px] w-[60px] items-center justify-center rounded-xl p-2 transition-colors hover:bg-accent',
               pathname === '/' && 'bg-accent'
             )}
           >
@@ -39,7 +39,7 @@ export default function SideNav() {
         <LinkComponent href="/search">
           <div
             className={cn(
-              'my-4 flex h-[48px] w-[60px] items-center justify-center rounded-lg p-2 transition-colors hover:bg-accent',
+              'my-4 flex h-[48px] w-[60px] items-center justify-center rounded-xl p-2 transition-colors hover:bg-accent',
               pathname === '/search' && 'bg-accent'
             )}
           >
@@ -52,7 +52,7 @@ export default function SideNav() {
         <LinkComponent href="/profile">
           <div
             className={cn(
-              'my-4 flex h-[48px] w-[60px] items-center justify-center rounded-lg p-2 transition-colors hover:bg-accent',
+              'my-4 flex h-[48px] w-[60px] items-center justify-center rounded-xl p-2 transition-colors hover:bg-accent',
               pathname === '/profile' && 'bg-accent'
             )}
           >

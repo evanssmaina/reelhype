@@ -1,7 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-
 import { SearchResults as SearchResultsTypes } from '@/types/tmdb-types';
 import { Card, CardBody, Pagination } from '@nextui-org/react';
 
@@ -12,17 +10,17 @@ import { AnimatedGroup } from '@/components/ui/animated-group';
 interface SearchResultsProps {
   results: SearchResultsTypes;
   query: string | null;
-  page: number;
+  currentPage: number;
+  onPageChange: (page: number) => void;
 }
 
 export default function SearchResults({
   results,
   query,
-  page,
+  currentPage,
+  onPageChange,
 }: SearchResultsProps) {
-  const router = useRouter();
-
-  if (!results || results.results.length === 0) {
+  if (!results) {
     return (
       <div className="text-center text-gray-500">
         No results found for "{query}"
@@ -85,12 +83,10 @@ export default function SearchResults({
       <div className="flex justify-center">
         <Pagination
           total={Math.min(results.total_pages, 500)}
-          page={page}
+          page={currentPage}
           variant="light"
           showControls
-          onChange={(page) => {
-            router.push(`/search?q=${query}&page=${page}`);
-          }}
+          onChange={onPageChange}
           classNames={{
             wrapper: 'gap-2',
             item: 'w-8 h-8',

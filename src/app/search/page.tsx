@@ -1,21 +1,33 @@
-import { getSearchResults } from '@/server/tmdb';
-import type { SearchParams } from 'nuqs/server';
+import { getSearchResults, getTrendingMovies } from '@/server/tmdb';
+import { SearchParams } from 'nuqs';
 
-import { loadSearchParams } from '@/components/searchParams';
+import { searchParamsCache } from '@/components/searchParams';
 
 import { SearchWrapper } from './search-wrapper';
 
-interface SearchPageProps {
+type PageProps = {
   searchParams: Promise<SearchParams>;
-}
-
-export default async function SearchPage({ searchParams }: SearchPageProps) {
-  const { query, page } = await loadSearchParams(searchParams);
-  const { searchResults } = await getSearchResults({ query, page });
+};
+export default async function SearchPage({ searchParams }: PageProps) {
+  const { q, page } = await searchParamsCache.parse(searchParams);
+  const { movies } = await getTrendingMovies();
+  const { searchResults } = await getSearchResults({
+    query: q,
+    page,
+  });
 
   return (
     <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-8 px-4 py-8">
-      <SearchWrapper searchResults={searchResults} />
+      <div className="flex flex-col gap-4">
+        <h1 className="text-4xl font-medium">Search</h1>
+      </div>
+
+      <SearchWrapper
+        q={q}
+        page={page}
+        searchResults={searchResults}
+        trendingMovies={movies}
+      />
     </main>
   );
 }

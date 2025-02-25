@@ -1,53 +1,68 @@
 'use client';
 
-import { Suspense } from 'react';
+import { useTransition } from 'react';
 
-import { useRouter } from 'next/navigation';
-
-import type { SearchResults as SearchResultsTypes } from '@/types/tmdb-types';
-import { useQueryState } from 'nuqs';
+import type {
+  Movies,
+  SearchResults as SearchResultsTypes,
+} from '@/types/tmdb-types';
+import { useQueryStates } from 'nuqs';
 
 import { searchParams } from '@/components/searchParams';
 
 import SearchForm from './search-form';
 import SearchResults from './search-results';
+import { TrendingMovies } from './trending-movies';
 
 export function SearchWrapper({
   searchResults,
+  trendingMovies,
 }: {
+  q: string | null;
+  page: number;
   searchResults: SearchResultsTypes;
+  trendingMovies: Movies['results'][number][];
 }) {
-  const router = useRouter();
-  const [searchQuery, setSearchQuery] = useQueryState('q', searchParams.query);
-  const [page, setPage] = useQueryState('page', searchParams.page);
+  const [{ q, page }, setQueryParams] = useQueryStates(searchParams, {
+    shallow: false,
+    throttleMs: 1000,
+  });
 
-  const handleSearch = (value: string) => {
-    setSearchQuery(value);
-    setPage(1); // Reset to first page on new search
-    router.push(`/search?q=${value}&page=1`);
+  if (!searchResults) {
+    return (
+      <div className="grid animate-pulse grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {[...Array(8)].map((_, i) => (
+          <div
+            key={i}
+            className="aspect-[2/3] rounded-lg bg-gray-200 dark:bg-gray-800"
+          />
+        ))}
+      </div>
+    );
+  }
+
+  const handleSearch = (searchQuery: string) => {
+    setQueryParams({ q: searchQuery, page: 0 });
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setQueryParams({ q, page: newPage });
   };
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-7xl flex-col gap-8 px-4 py-8">
-      <SearchForm initialQuery={searchQuery || ''} onSearch={handleSearch} />
-      <Suspense
-        fallback={
-          <div className="grid animate-pulse grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {[...Array(8)].map((_, i) => (
-              <div
-                key={i}
-                className="aspect-[2/3] rounded-lg bg-gray-200 dark:bg-gray-800"
-              />
-            ))}
-          </div>
-        }
-      >
+    <div className="flex flex-col gap-8">
+      <SearchForm query={q} onSearch={handleSearch} />
+
+      {q ? (
         <SearchResults
           results={searchResults}
-          query={searchQuery}
-          page={Number(page)}
+          query={q}
+          onPageChange={handlePageChange}
+          currentPage={page}
         />
-      </Suspense>
+      ) : (
+        <TrendingMovies results={trendingMovies} />
+      )}
     </div>
   );
 }
