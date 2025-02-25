@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import cloudflareLoader from '@/config/image-loader';
+import CloudinaryImageLoader from '@/config/image-loader';
 
 interface ImageComponentProps {
   src: string;
@@ -39,7 +39,7 @@ export default function ImageComponent({
       fill={fill}
       sizes={sizes}
       style={style}
-      loader={cloudflareLoader}
+      loader={CloudinaryImageLoader}
     />
   );
 }

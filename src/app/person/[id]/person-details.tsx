@@ -20,7 +20,7 @@ export default function PersonDetails({ details, images }: PersonDetailsProps) {
       <CardBody className="p-0">
         <div className="relative aspect-[2/3] w-full overflow-hidden">
           <ImageComponent
-            src={`https://image.tmdb.org/t/p/w500${details.profile_path}`}
+            src={details.profile_path}
             alt={details.name}
             width={500}
             height={750}

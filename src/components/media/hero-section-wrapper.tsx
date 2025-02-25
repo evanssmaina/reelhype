@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 
 import { TrendingAll } from '@/types/tmdb-types';
 
@@ -13,27 +13,24 @@ interface HeroSectionWrapperProps {
 export default function HeroSectionWrapper({
   trendingData,
 }: HeroSectionWrapperProps) {
-  const [randomBackdrop, setRandomBackdrop] = useState<any>(null);
-
-  useEffect(() => {
-    const selected =
-      trendingData[Math.floor(Math.random() * trendingData.length)];
-    setRandomBackdrop(selected);
+  const randomBackdrop = useMemo<TrendingAll['results'][number] | null>(() => {
+    if (trendingData.length === 0) return null;
+    return trendingData[Math.floor(Math.random() * trendingData.length)];
   }, [trendingData]);
 
   if (!randomBackdrop) return null;
 
-  const backdropPath = `https://image.tmdb.org/t/p/original${randomBackdrop.backdrop_path}`;
+  const backdropPath = randomBackdrop.backdrop_path;
   const releaseDate =
     randomBackdrop.release_date || randomBackdrop.first_air_date;
   const mediaType = randomBackdrop.media_type === 'movie' ? 'movie' : 'tv';
 
   return (
     <HeroSection
-      backdropPath={backdropPath}
-      title={randomBackdrop.title || randomBackdrop.name}
-      overview={randomBackdrop.overview}
-      releaseDate={releaseDate}
+      backdropPath={backdropPath ?? ''}
+      title={randomBackdrop.title || randomBackdrop.name || ''}
+      overview={randomBackdrop.overview || ''}
+      releaseDate={releaseDate ?? ''}
       mediaType={mediaType}
       id={randomBackdrop.id}
     />

@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 
 import { inter, urbanist } from '@/fonts';
-import NextUIProviderWrapper from '@/providers/nextui-provider';
-import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import Providers from '@/providers/providers';
 
 import AnimationWrapper from '@/components/animation/animation-wrapper';
 import MobileNav from '@/components/layout/mobile-nav';
@@ -32,16 +31,14 @@ export default function RootLayout({
           'min-h-screen antialiased'
         )}
       >
-        <NextUIProviderWrapper>
+        <Providers>
           <AnimationWrapper>
-            <NuqsAdapter>
-              <TopMobileNav />
-              <SideNav />
-              <div className="z-10 w-full pl-0 lg:pl-20">{children}</div>
-              <MobileNav />
-            </NuqsAdapter>
+            <TopMobileNav />
+            <SideNav />
+            <div className="z-10 w-full pl-0 lg:pl-20">{children}</div>
+            <MobileNav />
           </AnimationWrapper>
-        </NextUIProviderWrapper>
+        </Providers>
       </body>
     </html>
   );

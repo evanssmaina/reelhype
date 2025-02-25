@@ -63,13 +63,15 @@ async function getSearchResults({
   query,
   page,
   include_adult = false,
+  language = 'en-US',
 }: {
   query: string;
   page: number;
   include_adult?: boolean;
+  language?: string;
 }) {
   const data: SearchResults = await fetchTMDBData(
-    `/search/multi?include_adult=${include_adult}&language=en-US&page=${page}&query=${encodeURIComponent(
+    `/search/multi?include_adult=${include_adult}&language=${language}&page=${page}&query=${encodeURIComponent(
       query
     )}`
   );

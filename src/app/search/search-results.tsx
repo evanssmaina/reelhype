@@ -11,7 +11,7 @@ import { AnimatedGroup } from '@/components/ui/animated-group';
 
 interface SearchResultsProps {
   results: SearchResultsTypes;
-  query: string;
+  query: string | null;
   page: number;
 }
 
@@ -40,14 +40,22 @@ export default function SearchResults({
           return (
             <LinkComponent
               key={result.id}
-              href={`/watch/${result.media_type}/${result.id}`}
+              href={
+                result.media_type === 'person'
+                  ? `/person/${result.id}`
+                  : `/watch/${result.media_type}/${result.id}`
+              }
             >
               <Card className="group h-full overflow-hidden">
                 <CardBody className="p-0">
                   <div className="relative aspect-[2/3] w-full overflow-hidden">
-                    {result.poster_path ? (
+                    {result.poster_path || result.profile_path ? (
                       <ImageComponent
-                        src={result.poster_path ?? ''}
+                        src={
+                          result.media_type === 'person'
+                            ? (result.profile_path ?? '')
+                            : (result.poster_path ?? '')
+                        }
                         alt={result.title || result.name || ''}
                         width={500}
                         height={750}
