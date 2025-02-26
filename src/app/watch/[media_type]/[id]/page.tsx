@@ -217,12 +217,3 @@ function MediaContent({
     </>
   );
 }
-
-export async function generateMetadata({ params }: PageProps) {
-  const resolvedParams = await params;
-
-  return {
-    title: `${resolvedParams.media_type} - Reelhype`,
-    description: `Watch ${resolvedParams.media_type} on Reelhype`,
-  };
-}
