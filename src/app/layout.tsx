@@ -29,6 +29,10 @@ export const metadata: Metadata = {
     'Film community',
     'reelhype',
   ],
+  openGraph: {
+    url: 'https://reelhype.space',
+    siteName: 'reelhype',
+  },
   metadataBase: new URL('https://reelhype.space'),
   robots: {
     index: true,
