@@ -1,3 +1,5 @@
+import type { Metadata } from 'next';
+
 import { getSearchResults, getTrendingMovies } from '@/server/tmdb';
 import { SearchParams } from 'nuqs';
 
@@ -8,6 +10,12 @@ import { SearchWrapper } from './search-wrapper';
 type PageProps = {
   searchParams: Promise<SearchParams>;
 };
+
+export const metadata: Metadata = {
+  title: 'Search',
+  description: 'Search page',
+};
+
 export default async function SearchPage({ searchParams }: PageProps) {
   const { q, page } = await searchParamsCache.parse(searchParams);
   const { movies } = await getTrendingMovies();

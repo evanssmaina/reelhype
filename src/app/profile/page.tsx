@@ -1,8 +1,15 @@
 'use client';
 
+import type { Metadata } from 'next';
+
 import { Avatar, Button, Card, CardBody } from '@nextui-org/react';
 
 import { UserIcon } from '@/components/ui/user';
+
+export const metadata: Metadata = {
+  title: 'Profile',
+  description: 'Profile page',
+};
 
 export default function ProfilePage() {
   return (

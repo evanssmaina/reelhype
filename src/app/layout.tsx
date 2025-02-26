@@ -13,8 +13,30 @@ import { cn } from '@/lib/utils';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
-  title: 'Reelhype',
-  description: 'Your ultimate movie and TV show companion',
+  title: {
+    template: '%s - reelhype',
+    default: 'reelhype – Movies Deserve More Than Just a Rating',
+  },
+  description:
+    'reelhype is where movie and TV lovers come to spill the tea, drop hot takes, and argue over whether that plot twist actually made sense. Watch trailers, review films, and chat with AI that actually gets your taste in movies.',
+  keywords: [
+    'Movie reviews',
+    'TV show discussions',
+    'Film debates',
+    'Trailer reactions',
+    'AI movie chat',
+    'Movie ratings',
+    'Film community',
+    'reelhype',
+  ],
+  metadataBase: new URL('https://reelhype.space'),
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: 'https://reelhype.space',
+  },
 };
 
 export default function RootLayout({
