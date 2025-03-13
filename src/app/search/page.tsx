@@ -18,11 +18,13 @@ export const metadata: Metadata = {
 
 export default async function SearchPage({ searchParams }: PageProps) {
   const { q, page } = await searchParamsCache.parse(searchParams);
-  const { movies } = await getTrendingMovies();
-  const { searchResults } = await getSearchResults({
-    query: q,
-    page,
-  });
+  const [trendingMovies, searchResults] = await Promise.all([
+    getTrendingMovies(),
+    getSearchResults({ query: q, page }),
+  ]);
+
+  const { movies } = trendingMovies;
+  const { searchResults: results } = searchResults;
 
   return (
     <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-8 px-4 py-8">
@@ -33,7 +35,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
       <SearchWrapper
         q={q}
         page={page}
-        searchResults={searchResults}
+        searchResults={results}
         trendingMovies={movies}
       />
     </main>

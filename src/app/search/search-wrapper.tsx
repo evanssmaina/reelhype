@@ -43,7 +43,7 @@ export function SearchWrapper({
 
   const handleSearch = useDebouncedCallback((searchQuery: string) => {
     setQueryParams({ q: searchQuery, page: 0 });
-  }, 300);
+  }, 500);
 
   const handlePageChange = useCallback(
     (newPage: number) => {

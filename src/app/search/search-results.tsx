@@ -1,5 +1,7 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import { SearchResults as SearchResultsTypes } from '@/types/tmdb-types';
 import { Card, CardBody, Pagination } from '@nextui-org/react';
 
@@ -27,6 +29,11 @@ export default function SearchResults({
       </div>
     );
   }
+
+  const totalPages = useMemo(
+    () => Math.min(results.total_pages, 500),
+    [results.total_pages]
+  );
 
   return (
     <div className="flex flex-col gap-8">
@@ -82,7 +89,7 @@ export default function SearchResults({
 
       <div className="flex justify-center">
         <Pagination
-          total={Math.min(results.total_pages, 500)}
+          total={totalPages}
           page={currentPage}
           variant="light"
           showControls
