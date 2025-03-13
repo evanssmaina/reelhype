@@ -5,7 +5,7 @@ import { SearchParams } from 'nuqs';
 
 import { searchParamsCache } from '@/components/searchParams';
 
-import { SearchWrapper } from './search-wrapper';
+import { SearchUI } from './search-ui';
 
 type PageProps = {
   searchParams: Promise<SearchParams>;
@@ -32,12 +32,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
         <h1 className="text-4xl font-medium">Search</h1>
       </div>
 
-      <SearchWrapper
-        q={q}
-        page={page}
-        searchResults={results}
-        trendingMovies={movies}
-      />
+      <SearchUI searchResults={results} trendingMovies={movies} />
     </main>
   );
 }

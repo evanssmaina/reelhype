@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 interface SearchFormProps {
   handleSearch: (query: string) => void;
@@ -11,6 +11,7 @@ export default function SearchForm({ handleSearch }: SearchFormProps) {
   return (
     <div className="w-full">
       <input
+        type="text"
         value={searchInputQuery}
         onChange={({ target }) => {
           setSearchInputQuery(target.value);
