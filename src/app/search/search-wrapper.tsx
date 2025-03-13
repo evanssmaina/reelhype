@@ -1,12 +1,13 @@
 'use client';
 
-import { useTransition } from 'react';
+import { useCallback } from 'react';
 
 import type {
   Movies,
   SearchResults as SearchResultsTypes,
 } from '@/types/tmdb-types';
 import { useQueryStates } from 'nuqs';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { searchParams } from '@/components/searchParams';
 
@@ -25,7 +26,6 @@ export function SearchWrapper({
 }) {
   const [{ q, page }, setQueryParams] = useQueryStates(searchParams, {
     shallow: false,
-    throttleMs: 1000,
   });
 
   if (!searchResults) {
@@ -41,17 +41,20 @@ export function SearchWrapper({
     );
   }
 
-  const handleSearch = (searchQuery: string) => {
+  const handleSearch = useDebouncedCallback((searchQuery: string) => {
     setQueryParams({ q: searchQuery, page: 0 });
-  };
+  }, 300);
 
-  const handlePageChange = (newPage: number) => {
-    setQueryParams({ q, page: newPage });
-  };
+  const handlePageChange = useCallback(
+    (newPage: number) => {
+      setQueryParams({ q, page: newPage });
+    },
+    [q]
+  );
 
   return (
     <div className="flex flex-col gap-8">
-      <SearchForm query={q} onSearch={handleSearch} />
+      <SearchForm handleSearch={handleSearch} />
 
       {q ? (
         <SearchResults
