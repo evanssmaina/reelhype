@@ -3,8 +3,6 @@
 import { use, useCallback, useMemo } from 'react';
 import { Suspense } from 'react';
 
-import { getSearchResults } from '@/server/tmdb';
-import { getTrendingAll } from '@/server/tmdb';
 import type { SearchResults, TrendingAll } from '@/types/tmdb-types';
 import { Pagination } from '@nextui-org/react';
 import { useQueryStates } from 'nuqs';
@@ -16,37 +14,35 @@ import { SearchResultCard } from './search-result-card';
 import { SearchSkeleton } from './search-skeleton';
 
 interface SearchResultsProps {
-  trendingAllPromise: Promise<TrendingAll>;
-  searchResultsPromise: Promise<SearchResults>;
+  trendingAll: TrendingAll | null;
+  searchResults: SearchResults | null;
+  query: string;
+  page: number;
 }
 
 export function SearchResults({
-  searchResultsPromise,
-  trendingAllPromise,
+  searchResults,
+  trendingAll,
+  query,
+  page,
 }: SearchResultsProps) {
-  const [{ q, page }, setQueryParams] = useQueryStates(searchParams, {
-    shallow: false,
-  });
-
-  const searchResults = use(searchResultsPromise);
-  const trendingAll = use(trendingAllPromise);
+  const [_, setQueryParams] = useQueryStates(searchParams, { shallow: false });
 
   const handlePageChange = useCallback(
     (newPage: number) => {
-      const simpPage = newPage - 1;
-      setQueryParams({ q, page: simpPage });
+      setQueryParams({ q: query, page: newPage - 1 });
     },
-    [q]
+    [query, setQueryParams]
   );
 
-  const totalPages = useMemo(
-    () => Math.min(searchResults.total_pages, 500),
-    [searchResults.total_pages]
-  );
+  const totalPages = useMemo(() => {
+    if (!searchResults) return 0;
+    return Math.min(searchResults.total_pages, 500);
+  }, [searchResults]);
 
   return (
     <div>
-      {q ? (
+      {query ? (
         <>
           {searchResults ? (
             <div className="flex flex-col gap-8">
@@ -77,21 +73,19 @@ export function SearchResults({
             </div>
           ) : (
             <div className="text-center text-gray-500">
-              No results found for "{q}"
+              No results found for "{query}"
             </div>
           )}
         </>
       ) : (
-        <Suspense fallback={<SearchSkeleton />}>
-          <AnimatedGroup
-            preset="slide"
-            className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
-          >
-            {trendingAll?.results.map((result) => (
-              <SearchResultCard key={result.id} result={result} />
-            ))}
-          </AnimatedGroup>
-        </Suspense>
+        <AnimatedGroup
+          preset="slide"
+          className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
+        >
+          {trendingAll?.results.map((result) => (
+            <SearchResultCard key={result.id} result={result} />
+          ))}
+        </AnimatedGroup>
       )}
     </div>
   );

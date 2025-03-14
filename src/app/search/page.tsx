@@ -17,15 +17,17 @@ export const metadata: Metadata = {
 
 export default async function SearchPage({ searchParams }: PageProps) {
   const { q, page } = await searchParamsCache.parse(searchParams);
-  const trendingAll = getTrendingAll();
-  const searchResults = getSearchResults({ query: q, page });
+  const searchResults = q
+    ? await getSearchResults({ query: q, page: page || 0 })
+    : null;
+  const trendingAll = !q ? await getTrendingAll() : null;
+
   return (
-    <div className="w-full">
-      <SearchResults
-        trendingAllPromise={trendingAll as any}
-        searchResultsPromise={searchResults}
-      />
-      s
-    </div>
+    <SearchResults
+      searchResults={searchResults}
+      trendingAll={trendingAll as any}
+      query={q}
+      page={page || 0}
+    />
   );
 }
