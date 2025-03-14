@@ -97,8 +97,6 @@ async function getSearchResults({
     results,
   };
 
-  console.log(searchResults);
-
   return { searchResults };
 }
 

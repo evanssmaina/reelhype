@@ -1,13 +1,22 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
-interface SearchFormProps {
-  handleSearch: (query: string) => void;
-}
+import { useQueryStates } from 'nuqs';
+import { useDebouncedCallback } from 'use-debounce';
 
-export default function SearchForm({ handleSearch }: SearchFormProps) {
+import { searchParams } from '@/components/searchParams';
+
+export function Search() {
   const [searchInputQuery, setSearchInputQuery] = useState('');
+  const [_, setQueryParams] = useQueryStates(searchParams, {
+    shallow: false,
+  });
+
+  const handleSearch = useDebouncedCallback((searchQuery: string) => {
+    setQueryParams({ q: searchQuery, page: 0 });
+  }, 500);
+
   return (
     <div className="w-full">
       <input
