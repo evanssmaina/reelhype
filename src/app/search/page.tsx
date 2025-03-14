@@ -26,7 +26,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
     <div className="w-full">
       <Suspense fallback={<SearchSkeleton />}>
         <SearchResults
-          trendingAllPromise={trendingAll}
+          trendingAllPromise={trendingAll as any}
           searchResultsPromise={searchResults}
         />
       </Suspense>

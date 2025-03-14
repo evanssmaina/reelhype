@@ -14,7 +14,7 @@ import { AnimatedGroup } from '@/components/ui/animated-group';
 import { SearchResultCard } from './search-result-card';
 
 interface SearchResultsProps {
-  trendingAllPromise: Promise<TrendingAll[]>;
+  trendingAllPromise: Promise<TrendingAll>;
   searchResultsPromise: Promise<SearchResults>;
 }
 
@@ -82,8 +82,8 @@ export function SearchResults({
           preset="slide"
           className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
         >
-          {trendingAll?.map((result) => (
-            <SearchResultCard result={result as any} />
+          {trendingAll?.results.map((result) => (
+            <SearchResultCard result={result} />
           ))}
         </AnimatedGroup>
       )}

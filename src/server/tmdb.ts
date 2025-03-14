@@ -44,7 +44,7 @@ async function getTrendingAll() {
     '/trending/all/day?language=en-US'
   );
 
-  const trendingAll = data.results.map((trending) => ({
+  const results = data.results.map((trending) => ({
     ...trending,
     poster_path: trending.poster_path
       ? `https://image.tmdb.org/t/p/original${trending.poster_path}`
@@ -54,9 +54,12 @@ async function getTrendingAll() {
       : null,
   }));
 
-  return {
-    trendingAll,
+  const trendingAll = {
+    page: data.page,
+    results,
   };
+
+  return trendingAll;
 }
 
 async function getSearchResults({
@@ -97,7 +100,7 @@ async function getSearchResults({
     results,
   };
 
-  return { searchResults };
+  return searchResults;
 }
 
 export {

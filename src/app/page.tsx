@@ -76,7 +76,7 @@ function ContentSkeleton() {
 }
 
 async function HeroSectionData() {
-  const { trendingAll } = await getTrendingAll();
+  const { results: trendingAll } = await getTrendingAll();
   return <HeroSectionWrapper trendingData={trendingAll} />;
 }
 
