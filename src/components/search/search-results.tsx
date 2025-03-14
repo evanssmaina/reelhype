@@ -1,6 +1,7 @@
 'use client';
 
 import { use, useCallback, useMemo } from 'react';
+import { Suspense } from 'react';
 
 import { getSearchResults } from '@/server/tmdb';
 import { getTrendingAll } from '@/server/tmdb';
@@ -12,6 +13,7 @@ import { searchParams } from '@/components/searchParams';
 import { AnimatedGroup } from '@/components/ui/animated-group';
 
 import { SearchResultCard } from './search-result-card';
+import { SearchSkeleton } from './search-skeleton';
 
 interface SearchResultsProps {
   trendingAllPromise: Promise<TrendingAll>;
@@ -48,14 +50,16 @@ export function SearchResults({
         <>
           {searchResults ? (
             <div className="flex flex-col gap-8">
-              <AnimatedGroup
-                preset="slide"
-                className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
-              >
-                {searchResults?.results.map((result) => (
-                  <SearchResultCard result={result} />
-                ))}
-              </AnimatedGroup>
+              <Suspense fallback={<SearchSkeleton />}>
+                <AnimatedGroup
+                  preset="slide"
+                  className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
+                >
+                  {searchResults?.results.map((result) => (
+                    <SearchResultCard key={result.id} result={result} />
+                  ))}
+                </AnimatedGroup>
+              </Suspense>
 
               <div className="flex justify-center">
                 <Pagination
@@ -78,14 +82,16 @@ export function SearchResults({
           )}
         </>
       ) : (
-        <AnimatedGroup
-          preset="slide"
-          className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
-        >
-          {trendingAll?.results.map((result) => (
-            <SearchResultCard result={result} />
-          ))}
-        </AnimatedGroup>
+        <Suspense fallback={<SearchSkeleton />}>
+          <AnimatedGroup
+            preset="slide"
+            className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
+          >
+            {trendingAll?.results.map((result) => (
+              <SearchResultCard key={result.id} result={result} />
+            ))}
+          </AnimatedGroup>
+        </Suspense>
       )}
     </div>
   );
