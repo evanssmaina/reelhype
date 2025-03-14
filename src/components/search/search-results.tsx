@@ -4,6 +4,7 @@ import { use, useCallback, useMemo } from 'react';
 
 import { getSearchResults } from '@/server/tmdb';
 import { getTrendingAll } from '@/server/tmdb';
+import type { SearchResults, TrendingAll } from '@/types/tmdb-types';
 import { Pagination } from '@nextui-org/react';
 import { useQueryStates } from 'nuqs';
 
@@ -12,13 +13,21 @@ import { AnimatedGroup } from '@/components/ui/animated-group';
 
 import { SearchResultCard } from './search-result-card';
 
-export function SearchResults() {
+interface SearchResultsProps {
+  trendingAllPromise: Promise<TrendingAll[]>;
+  searchResultsPromise: Promise<SearchResults>;
+}
+
+export function SearchResults({
+  searchResultsPromise,
+  trendingAllPromise,
+}: SearchResultsProps) {
   const [{ q, page }, setQueryParams] = useQueryStates(searchParams, {
     shallow: false,
   });
 
-  const { trendingAll } = use(getTrendingAll());
-  const { searchResults } = use(getSearchResults({ query: q, page }));
+  const searchResults = use(searchResultsPromise);
+  const trendingAll = use(trendingAllPromise);
 
   const handlePageChange = useCallback(
     (newPage: number) => {
@@ -73,7 +82,9 @@ export function SearchResults() {
           preset="slide"
           className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
         >
-          {trendingAll?.map((result) => <SearchResultCard result={result} />)}
+          {trendingAll?.map((result) => (
+            <SearchResultCard result={result as any} />
+          ))}
         </AnimatedGroup>
       )}
     </div>
